@@ -97,7 +97,16 @@ class CKEditor extends Panel
 	* @var string|array
 	*/
 	private $Config;
-	
+	/**
+	* Constructor
+	* 
+	* @param string $text
+	* @param integer $left
+	* @param integer $top
+	* @param integer $width
+	* @param integer $height
+	* @return CKEditor
+	*/
 	function CKEditor($text = '', $left=0, $top=0, $width=400, $height=500)
 	{
 		parent::Panel($left, $top, $width, $height);
@@ -256,7 +265,8 @@ class CKEditor extends Panel
 		//Add ckeditor script files
 		ClientScript::AddSource($relativePath . '/ckeditor/ckeditor.js', false);
 		//Add NOLOH bridge script file
-		ClientScript::AddSource($relativePath . '/Bridge/bridge-min.js');
+		ClientScript::AddSource($relativePath . '/Bridge/bridge.js');
+//		ClientScript::AddSource($relativePath . '/Bridge/bridge-min.js');
 		//Trigger client ckeditor instantiation
 		ClientScript::RaceQueue($this->TextHolder, 'CKEDITOR', 'CKEDITOR.replace', array($this->TextHolder->Id, $this->Config));
 	}

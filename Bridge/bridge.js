@@ -5,7 +5,6 @@ _NChkCond(function(){return typeof(CKEDITOR) != 'undefined'}, function(){
 	   {
 	      if(e.sender._lastInstance.checkDirty())
 	      {
-	         e.sender._lastInstance.updateElement();
 			 var id = e.sender._lastInstance.name;
 			 _NSetProperty(id, 'value', e.sender._lastInstance.getData());
 	      }

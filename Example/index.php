@@ -11,7 +11,7 @@ class CKEditorTest extends WebPage
 		//Instantiate first CKEditor
 		$editor1 = new CKEditor('', 10, 40);
 		//Instantiate second CKEditor
-		$editor2 = new CKEditor('Text that is already entered', $editor1->Right + 10, 40, 300, 600);
+		$editor2 = new CKEditor('Text that is already entered', $editor1->Right + 10, 40, 300);
 		//Set the second CKEditor's Skin to Office theme
 		$editor2->Skin = CKEditor::Office;
 		//Instantiate third CKEditor
@@ -35,6 +35,8 @@ class CKEditorTest extends WebPage
 				//Button to switch to Advanced Toolbar	
 				$this->Controls->Add(new Button('Advanced', $basic->Right + 10, 5))
 					->Click = new ServerEvent($control, 'SetToolbar', CKEditor::Full);
+				$this->Controls->Add($ta = new TextArea('', $control->Left, $control->Bottom + 10, $control->Width))
+					->Click = new ServerEvent($this, 'ShowText', $control, $ta);
 			}
 	}
 	/**
@@ -48,6 +50,10 @@ class CKEditorTest extends WebPage
 	{
 		if(($value = $selection->SelectedValue) !== null)
 			$editor->Skin = $value;
+	}
+	function ShowText($ckEditor, $textArea)
+	{
+		$textArea->Text = $ckEditor->Text;
 	}
 }
 ?>
