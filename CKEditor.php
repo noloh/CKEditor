@@ -253,7 +253,7 @@ class CKEditor extends Panel
 	*/
 	static function CreateToolbar($name, $strips)
 	{
-		ClientScript::RaceQueue(WebPage::That(), 'CKEDITOR', 'CKEDITOR.config.toolbar_' . $name .'=' . ClientEvent::ClientFormat(array($strips)) . ';');		
+		ClientScript::RaceQueue(WebPage::That(), 'CKEDITOR', 'CKEDITOR.config.toolbar_' . $name .'=' . ClientEvent::ClientFormat($strips) . ';');		
 	}
 	/**
 	* Do not call manually! Override of default Show(). Triggers when CKEditor instance is initially shown.

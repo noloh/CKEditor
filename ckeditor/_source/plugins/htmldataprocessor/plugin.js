@@ -178,6 +178,12 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 					}
 				},
 
+				html : function( element )
+				{
+					delete element.attributes.contenteditable;
+					delete element.attributes[ 'class' ];
+				},
+
 				body : function( element )
 				{
 					delete element.attributes.spellcheck;
@@ -195,7 +201,8 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 
 				title : function( element )
 				{
-					element.children[ 0 ].value = element.attributes[ '_cke_title' ];
+					var titleText = element.children[ 0 ];
+					titleText && ( titleText.value = element.attributes[ '_cke_title' ] || '' );
 				}
 			},
 
