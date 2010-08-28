@@ -202,15 +202,15 @@ class CKEditor extends Panel
 		}
 	}
 	/**
-	* Override of default SetHeight(). If $height is less than 200, editor area is reduced.
+	* Override of default SetHeight(). If $height is less than 200, but greater than 60 the  editor area is reduced.
 	* 
 	* @param integer $height
 	*/
 	function SetHeight($height)
 	{
 		parent::SetHeight($height);
-		if(is_int($height) && $height < 200)
-			$this->SetConfig('height', 100);
+		if(is_int($height) && $height > 60 && $height < 200)
+		    $this->SetConfig('height', $height - 60);
 	}
 	/**
 	* Sets the current Skin of your CKEditor instance.
