@@ -1,6 +1,6 @@
 <?php
 //Path to NOLOH Kernel, change to your path
-require_once("/var/www/htdocs/Stable/NOLOH/NOLOH.php");
+require_once("/var/www/htdocs/Projects/NOLOH/NOLOH.php");
 require_once("../CKEditor.php");
 
 class CKEditorTest extends WebPage
@@ -13,11 +13,11 @@ class CKEditorTest extends WebPage
 		//Instantiate second CKEditor
 		$editor2 = new CKEditor('Text that is already entered', $editor1->Right + 10, 40, 300);
 		//Set the second CKEditor's Skin to Office theme
-		$editor2->Skin = CKEditor::Office;
+//		$editor2->Skin = CKEditor::Office;
 		//Instantiate third CKEditor
 		$editor3 = new CKEditor('Text that is already entered', $editor2->Right + 50, 40);
 		//Set the third CKEditor's Skin to V2 theme
-		$editor3->Skin = CKEditor::V2;
+//		$editor3->Skin = CKEditor::V2;
 		//Adds the 3 Editors to the WebPage
 		$this->Controls->AddRange($editor1, $editor2, $editor3);
 		/*For each of the above 3 editors we're going to add a ComboBox above

@@ -123,7 +123,6 @@ class CKEditor extends Panel
 	private function SetDefaults()
 	{
 		$this->SetConfig('resize_enabled', false);
-		//$this->SetToolBar(self::Basic);
 	}
 	/**
 	* Returns the raw contents of the CKEditor
@@ -263,11 +262,9 @@ class CKEditor extends Panel
 		parent::Show();
 		$relativePath = System::GetRelativePath(getcwd(), dirname(__FILE__));
 		//Add ckeditor script files
-		ClientScript::AddSource($relativePath . '/ckeditor/ckeditor.js', false);
+		ClientScript::AddSource($relativePath . 'ckeditor/ckeditor.js', false);
 		//Add NOLOH bridge script file
-		ClientScript::AddSource($relativePath . '/Bridge/bridge.js');
-//		ClientScript::AddSource($relativePath . '/Bridge/bridge-min.js');
-		//Trigger client ckeditor instantiation
+		ClientScript::AddSource($relativePath . 'Bridge/bridge.js', false);
 		ClientScript::RaceQueue($this->TextHolder, 'CKEDITOR', 'CKEDITOR.replace', array($this->TextHolder->Id, $this->Config));
 	}
 }
