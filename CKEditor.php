@@ -195,7 +195,7 @@ class CKEditor extends Panel
 		{
 			ClientScript::Queue($this->TextHolder, "CKEDITOR.instances.{$this->TextHolder}.destroy");
 			if($race)
-				ClientScript::RaceQueue($this->TextHolder, 'CKEDITOR', 'CKEDITOR.replace', array($this->TextHolder->Id, $this->Config), true, Priority::Low);
+				ClientScript::RaceQueue($this->TextHolder, 'CKEDITOR.status == "loaded"', 'CKEDITOR.replace', array($this->TextHolder->Id, $this->Config), true, Priority::Low);
 			else
 				ClientScript::Queue($this->TextHolder, 'CKEDITOR.replace', array($this->TextHolder->Id, $this->Config), true, Priority::Low);
 		}
@@ -252,7 +252,9 @@ class CKEditor extends Panel
 	*/
 	static function CreateToolbar($name, $strips)
 	{
-		ClientScript::RaceQueue(WebPage::That(), 'CKEDITOR', 'CKEDITOR.config.toolbar_' . $name .'=' . ClientEvent::ClientFormat($strips) . ';');		
+		ClientScript::RaceQueue(WebPage::That(), 
+			'CKEDITOR.status == "loaded"', 'CKEDITOR.config.toolbar_' . $name .'=' 
+				. ClientEvent::ClientFormat($strips) . ';');				
 	}
 	/**
 	* Do not call manually! Override of default Show(). Triggers when CKEditor instance is initially shown.
@@ -265,7 +267,10 @@ class CKEditor extends Panel
 		ClientScript::AddSource($relativePath . 'ckeditor/ckeditor.js', false);
 		//Add NOLOH bridge script file
 		ClientScript::AddSource($relativePath . 'Bridge/bridge.js', false);
-		ClientScript::RaceQueue($this->TextHolder, 'CKEDITOR', 'CKEDITOR.replace', array($this->TextHolder->Id, $this->Config));
+		ClientScript::RaceQueue($this->TextHolder, 
+			'CKEDITOR.status == "loaded"', 
+			'CKEDITOR.replace', 
+			array($this->TextHolder->Id, $this->Config), false, Priority::Low);
 	}
 }
 ?>
