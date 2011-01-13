@@ -245,6 +245,10 @@ class CKEditor extends Panel
 		$this->Refresh(true);
 	}
 	/**
+	* Absolutely crazy voodoo. CKEditor likes to delete things in different
+	* orders in different browsers. This ate up a good 30hrs of my life.
+	*/
+	/**
 	* Create a new global Toolbar that can be used across all CKEditor instances.
 	* 
 	* After CreateToolbar() is used, you can then set your CKEditor instances to use your new toolbar via $object->Toolbar = $name;.
@@ -255,10 +259,17 @@ class CKEditor extends Panel
 	static function CreateToolbar($name, $strips)
 	{
 			ClientScript::RaceQueue(WebPage::That(), 
-			'CKEDITOR', 'CKEDITOR.on("loaded", function(e)' .
+			'CKEDITOR.status == "loaded"', 'CKEDITOR.on("toolbar", function(e)' .
 			'{CKEDITOR.config.toolbar_' . $name .'=' 
-				. ClientEvent::ClientFormat($strips) . ';});');
+				. ClientEvent::ClientFormat($strips) . ';});', null, false, Priority::High);
+
 	}
+	/**
+	* Related to above crazy voodoo. If custom toolbar have to ensure toolbar
+	* is loaded, otherwise have to create toolbar. Can't do fireOnce to remove
+	* loaded event, which would be ideal, due to more CKEditor craziness, but
+	* the || ensures that it doesn't get called again
+	*/
 	/**
 	* Do not call manually! Override of default Show(). Triggers when CKEditor instance is initially shown.
 	*/
@@ -271,7 +282,7 @@ class CKEditor extends Panel
 		//Add NOLOH bridge script file
 		ClientScript::AddSource($relativePath . 'Bridge/bridge.js', false);
 		if(isset($this->Config['toolbar']) && is_string($toolbar = $this->Config['toolbar']))
-			$condition = 'CKEDITOR.config.toolbar_' . $toolbar;
+			$condition = 'CKEDITOR.status == "loaded" && (CKEDITOR.config.toolbar_' . $toolbar . '|| CKEDITOR.fire("toolbar"))';
 		else 
 			$condition = 'CKEDITOR.status == "loaded"';
 		ClientScript::RaceQueue($this->TextHolder, 
