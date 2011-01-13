@@ -122,7 +122,9 @@ class CKEditor extends Panel
 	*/
 	private function SetDefaults()
 	{
-		$this->SetConfig('resize_enabled', false);
+		$this->SetConfig(
+			'resize_enabled', false,
+			'customConfig', '');
 	}
 	/**
 	* Returns the raw contents of the CKEditor
@@ -252,9 +254,10 @@ class CKEditor extends Panel
 	*/
 	static function CreateToolbar($name, $strips)
 	{
-		ClientScript::RaceQueue(WebPage::That(), 
-			'CKEDITOR.status == "loaded"', 'CKEDITOR.config.toolbar_' . $name .'=' 
-				. ClientEvent::ClientFormat($strips) . ';');				
+			ClientScript::RaceQueue(WebPage::That(), 
+			'CKEDITOR', 'CKEDITOR.on("loaded", function(e)' .
+			'{CKEDITOR.config.toolbar_' . $name .'=' 
+				. ClientEvent::ClientFormat($strips) . ';});');
 	}
 	/**
 	* Do not call manually! Override of default Show(). Triggers when CKEditor instance is initially shown.
@@ -267,9 +270,12 @@ class CKEditor extends Panel
 		ClientScript::AddSource($relativePath . 'ckeditor/ckeditor.js', false);
 		//Add NOLOH bridge script file
 		ClientScript::AddSource($relativePath . 'Bridge/bridge.js', false);
+		if(isset($this->Config['toolbar']) && is_string($toolbar = $this->Config['toolbar']))
+			$condition = 'CKEDITOR.config.toolbar_' . $toolbar;
+		else 
+			$condition = 'CKEDITOR.status == "loaded"';
 		ClientScript::RaceQueue($this->TextHolder, 
-			'CKEDITOR.status == "loaded"', 
-			'CKEDITOR.replace', 
+			$condition, 'CKEDITOR.replace', 
 			array($this->TextHolder->Id, $this->Config), false, Priority::Low);
 	}
 }
